@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="JD FitzGerald — Building reliable systems in Dublin at Meta." />
+  <meta name="robots" content="index,follow" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="JD FitzGerald" />
+  <meta property="og:description" content="I build teams and production systems that don’t wake people at night. Building reliable systems in Dublin at Meta." />
+  <meta property="og:type" content="website" />
+
+  <title>JD FitzGerald</title>
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #0b0c0f;
+      --muted: rgba(11, 12, 15, 0.68);
+      --faint: rgba(11, 12, 15, 0.10);
+      --card: rgba(11, 12, 15, 0.035);
+      --shadow: 0 12px 40px rgba(11, 12, 15, 0.06);
+      --shadow2: 0 10px 24px rgba(11, 12, 15, 0.08);
+      --radius: 18px;
+      --maxw: 880px;
+      --accent: 33 131 255; /* subtle blue, used as an RGB tuple */
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b0c0f;
+        --fg: #f3f4f6;
+        --muted: rgba(243, 244, 246, 0.68);
+        --faint: rgba(243, 244, 246, 0.12);
+        --card: rgba(243, 244, 246, 0.06);
+        --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+        --shadow2: 0 10px 24px rgba(0, 0, 0, 0.35);
+        --accent: 120 179 255; /* slightly brighter in dark mode */
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      color: var(--fg);
+      background: var(--bg);
+      font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      letter-spacing: -0.01em;
+      overflow-x: hidden;
+    }
+
+    /* Subtle background texture + glow (very restrained) */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(900px 500px at 15% 10%, rgba(var(--accent) / 0.10), transparent 55%),
+        radial-gradient(700px 420px at 85% 20%, rgba(var(--accent) / 0.06), transparent 60%),
+        radial-gradient(900px 520px at 50% 105%, rgba(var(--accent) / 0.08), transparent 60%),
+        linear-gradient(to bottom, rgba(var(--accent) / 0.02), transparent 35%),
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,0.00),
+          rgba(255,255,255,0.00) 6px,
+          rgba(0,0,0,0.015) 7px
+        );
+      opacity: 1;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body::before {
+        background:
+          radial-gradient(900px 500px at 15% 10%, rgba(var(--accent) / 0.14), transparent 55%),
+          radial-gradient(700px 420px at 85% 20%, rgba(var(--accent) / 0.10), transparent 60%),
+          radial-gradient(900px 520px at 50% 105%, rgba(var(--accent) / 0.12), transparent 60%),
+          linear-gradient(to bottom, rgba(var(--accent) / 0.03), transparent 35%),
+          repeating-linear-gradient(
+            0deg,
+            rgba(255,255,255,0.00),
+            rgba(255,255,255,0.00) 6px,
+            rgba(255,255,255,0.015) 7px
+          );
+      }
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid var(--faint);
+      padding-bottom: 1px;
+    }
+    a:hover { border-bottom-color: rgba(var(--accent) / 0.55); }
+    a:focus-visible {
+      outline: 2px solid rgba(var(--accent) / 0.6);
+      outline-offset: 3px;
+      border-bottom-color: transparent;
+      border-radius: 8px;
+    }
+
+    .wrap {
+      position: relative;
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 86px 20px 64px;
+    }
+
+    /* Layout container */
+    .panel {
+      border: 1px solid var(--faint);
+      border-radius: calc(var(--radius) + 6px);
+      background: color-mix(in oklab, var(--bg), rgba(var(--accent) / 0.02));
+      box-shadow: var(--shadow);
+      padding: 28px;
+      backdrop-filter: blur(6px);
+    }
+
+    @media (min-width: 860px) {
+      .panel { padding: 34px; }
+    }
+
+    header { margin-bottom: 28px; }
+
+    .name {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 14px 0;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 650;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: rgba(var(--accent) / 0.85);
+      box-shadow: 0 0 0 6px rgba(var(--accent) / 0.15);
+    }
+
+    h1 {
+      margin: 0 0 14px 0;
+      font-size: clamp(34px, 4.1vw, 52px);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      font-weight: 750;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 62ch;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin: 24px 0 6px;
+    }
+    @media (min-width: 820px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .card {
+      border: 1px solid var(--faint);
+      border-radius: var(--radius);
+      background: var(--card);
+      padding: 16px 16px 14px;
+      box-shadow: none;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow2);
+      border-color: rgba(var(--accent) / 0.35);
+    }
+
+    .card h3 {
+      margin: 0 0 6px 0;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 750;
+    }
+    .card p {
+      margin: 0;
+      color: color-mix(in oklab, var(--fg), var(--muted) 55%);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    section {
+      margin-top: 26px;
+      padding-top: 18px;
+      border-top: 1px solid var(--faint);
+    }
+
+    section h2 {
+      margin: 0 0 10px 0;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      font-weight: 750;
+    }
+
+    .about {
+      margin: 0;
+      font-size: 16px;
+      max-width: 75ch;
+    }
+    .about + .about { margin-top: 12px; color: var(--muted); }
+
+    .links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btnlink a {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--faint);
+      background: var(--card);
+      box-shadow: none;
+      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    }
+    .btnlink a:hover {
+      transform: translateY(-1px);
+      border-color: rgba(var(--accent) / 0.40);
+      box-shadow: var(--shadow2);
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+      opacity: 0.9;
+    }
+
+    .note {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    footer {
+      margin-top: 26px;
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border: 1px solid var(--faint);
+      border-radius: 999px;
+      background: var(--card);
+      color: var(--muted);
+    }
+
+    /* Optional: reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      .card, .btnlink a { transition: none; }
+      .card:hover, .btnlink a:hover { transform: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <div class="panel">
+      <header>
+        <p class="name"><span class="dot" aria-hidden="true"></span> JD FitzGerald</p>
+        <h1>I build teams and production systems that don’t wake people at night.</h1>
+        <p class="sub">Building reliable systems in Dublin at Meta.</p>
+
+        <div class="grid" aria-label="Focus areas">
+          <div class="card">
+            <h3>Production Engineering</h3>
+            <p>Reliability, observability, and incident culture.</p>
+          </div>
+          <div class="card">
+            <h3>Engineering Leadership</h3>
+            <p>Teams that ship well, run cleanly, and improve steadily.</p>
+          </div>
+          <div class="card">
+            <h3>Delivery</h3>
+            <p>Turning ambiguity into shipped software without drama.</p>
+          </div>
+        </div>
+      </header>
+
+      <section id="about">
+        <h2>About</h2>
+        <p class="about">
+          I work at the intersection of systems, reliability, and people — building software that stays predictable under real-world load.
+        </p>
+        <p class="about">
+          I’m interested in how complex technical and organisational systems behave, and the practical habits that make them calmer over time.
+        </p>
+      </section>
+
+      <section id="elsewhere">
+        <h2>Elsewhere</h2>
+        <ul class="links">
+          <li class="btnlink">
+            <a href="https://www.linkedin.com/in/jdfitzgerald/" rel="me">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5ZM.5 23.5h4V7.98h-4V23.5Zm7.5 0h4v-8.4c0-2.0.38-3.94 2.86-3.94 2.44 0 2.47 2.28 2.47 4.07v8.27h4V14.4c0-4.48-.96-7.92-6.2-7.92-2.52 0-4.2 1.38-4.9 2.68h-.06V7.98h-3.83V23.5Z"/>
+              </svg>
+              LinkedIn
+            </a>
+          </li>
+
+          <li class="btnlink">
+            <a href="https://www.threads.com/@jdfitzgerald" rel="me">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <!-- simple "@"-ish mark (neutral, not official branding) -->
+                <path fill="currentColor" d="M12 2.2c-5.41 0-9.8 4.39-9.8 9.8S6.59 21.8 12 21.8c2.74 0 5.27-1.13 7.1-2.95l-1.55-1.55A7.74 7.74 0 0 1 12 19.6a7.6 7.6 0 1 1 7.6-7.6c0 2.54-1.2 4.1-2.77 4.1-1.1 0-1.56-.68-1.56-1.74V10.2h-2v.88c-.6-.72-1.5-1.2-2.7-1.2-2.2 0-3.9 1.7-3.9 4.1s1.7 4.1 3.9 4.1c1.1 0 2.0-.4 2.6-1.1.4.78 1.2 1.28 2.7 1.28 2.9 0 4.8-2.5 4.8-6.3 0-5.41-4.39-9.8-9.8-9.8Zm-1.1 14c-1.2 0-2-.9-2-2.2s.8-2.2 2-2.2 2 .9 2 2.2-.8 2.2-2 2.2Z"/>
+              </svg>
+              Threads
+            </a>
+          </li>
+        </ul>
+
+        <p class="note">No tracking. No newsletter. Just a place to exist online.</p>
+      </section>
+
+      <footer>
+        <span class="pill">
+          <span aria-hidden="true">📍</span> Dublin
+        </span>
+        <span>© <span id="y"></span> JD FitzGerald</span>
+      </footer>
+    </div>
+  </main>
+
+  <script>
+    // purely for the footer year; remove if you want zero JS
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
